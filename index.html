@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Move Circle</title>
+    <style>
+      #container {
+        width: 300px;
+        height: 300px;
+        position: relative;
+        margin: 50px auto;
+        background-color: #eee;
+      }
+      #outer-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+        border: 2px solid #333;
+        position: absolute;
+        top: 50px;
+        left: 50px;
+      }
+      #inner-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        background-color: blue;
+        position: absolute;
+        top: 75px;
+        left: 75px;
+        cursor: move;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="outer-circle"></div>
+      <div id="inner-circle"></div>
+    </div>
+    <script>
+      var innerCircle = document.getElementById("inner-circle");
+      var container = document.getElementById("container");
+      var centerX = container.offsetWidth / 2;
+      var centerY = container.offsetHeight / 2;
+      
+      var isDragging = false;
+      var offset = {x: 0, y: 0};
+      
+      // Event listeners
+      innerCircle.addEventListener("mousedown", startDrag);
+      innerCircle.addEventListener("mousemove", drag);
+      innerCircle.addEventListener("mouseup", stopDrag);
+      
+      function startDrag(e) {
+        isDragging = true;
+        offset.x = e.offsetX;
+        offset.y = e.offsetY;
+      }
+      
+      function drag(e) {
+        if (isDragging) {
+          var x = e.pageX - container.offsetLeft - offset.x;
+          var y = e.pageY - container.offsetTop - offset.y;
+          innerCircle.style.left = x + "px";
+          innerCircle.style.top = y + "px";
+        }
+      }
+      
+      function stopDrag(e) {
+        isDragging = false;
+        animateCircle();
+      }
+      
+      function animateCircle() {
+        var x = parseInt(innerCircle.style.left);
+        var y = parseInt(innerCircle.style.top);
+        var dx = centerX - x;
+        var dy = centerY - y;
+        var distance = Math.sqrt(dx*dx + dy*dy);
+        var duration = distance / 100; // Adjust duration based on distance
+        innerCircle.style.transition = "all " + duration + "s ease-out";
+        innerCircle.style.left = centerX + "px";
+        innerCircle.style.top = centerY + "px";
+      }
+    </script>
+  </body>
+</html>
